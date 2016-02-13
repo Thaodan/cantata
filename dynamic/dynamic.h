@@ -57,13 +57,14 @@ public:
 
     typedef QMap<QString, QString> Rule;
     struct Entry {
-        Entry(const QString &n=QString()) : name(n), ratingFrom(0), ratingTo(0) { }
+        Entry(const QString &n=QString()) : name(n), ratingFrom(0), ratingTo(0), wholeAlbums(false) { }
         bool operator==(const Entry &o) const { return name==o.name; }
         bool haveRating() const { return ratingFrom>=0 && ratingTo>0; }
         QString name;
         QList<Rule> rules;
         int ratingFrom;
         int ratingTo;
+        bool wholeAlbums;
     };
 
     static Dynamic * self();
@@ -79,6 +80,7 @@ public:
     static const QString constGenreKey;
     static const QString constDateKey;
     static const QString constRatingKey;
+    static const QString constWholeAlbumsKey;
     static const QString constFileKey;
     static const QString constExactKey;
     static const QString constExcludeKey;

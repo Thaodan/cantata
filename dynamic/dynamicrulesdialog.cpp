@@ -192,6 +192,7 @@ void DynamicRulesDialog::edit(const QString &name)
     origName=name;
     ratingFrom->setValue(e.ratingFrom);
     ratingTo->setValue(e.ratingTo);
+    wholeAlbums->setChecked(e.wholeAlbums);
     show();
 }
 
@@ -345,6 +346,7 @@ bool DynamicRulesDialog::save()
     int to=ratingTo->value();
     entry.ratingFrom=qMin(from, to);
     entry.ratingTo=qMax(from, to);
+    entry.wholeAlbums=wholeAlbums->isChecked();
 
     for (int i=0; i<model->rowCount(); ++i) {
         QStandardItem *itm=model->item(i);

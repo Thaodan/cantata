@@ -142,6 +142,7 @@ const QString Dynamic::constTitleKey=QLatin1String("Title");
 const QString Dynamic::constGenreKey=QLatin1String("Genre");
 const QString Dynamic::constDateKey=QLatin1String("Date");
 const QString Dynamic::constRatingKey=QLatin1String("Rating");
+const QString Dynamic::constWholeAlbumsKey=QLatin1String("WholeAlbums");
 const QString Dynamic::constFileKey=QLatin1String("File");
 const QString Dynamic::constExactKey=QLatin1String("Exact");
 const QString Dynamic::constExcludeKey=QLatin1String("Exclude");
@@ -249,7 +250,15 @@ QVariant Dynamic::data(const QModelIndex &index, int role) const
         return IS_ACTIVE(entryList.at(index.row()).name) ? Icons::self()->replacePlayQueueIcon : Icons::self()->dynamicListIcon;
     case Cantata::Role_SubText: {
         const Entry &e=entryList.at(index.row());
-        return Plurals::rules(e.rules.count())+(e.haveRating() ? i18n(" - Rating: %1..%2", (double)e.ratingFrom/Song::Rating_Step, (double)e.ratingTo/Song::Rating_Step) : QString());
+        QString extra;
+        if (e.haveRating() && e.wholeAlbums) {
+            extra=i18n(" (Rating: %1..%2, Whole Albums)", (double)e.ratingFrom/Song::Rating_Step, (double)e.ratingTo/Song::Rating_Step);
+        } else if (e.haveRating()) {
+            extra=i18n(" (Rating: %1..%2)", (double)e.ratingFrom/Song::Rating_Step, (double)e.ratingTo/Song::Rating_Step);
+        } else if (e.wholeAlbums) {
+            extra=i18n(" (Whole Albums)");
+        }
+        return Plurals::rules(e.rules.count())+extra;
     }
     case Cantata::Role_Actions: {
         QVariant v;
@@ -290,7 +299,10 @@ bool Dynamic::save(const Entry &e)
     QString string;
     QTextStream str(&string);
     if (e.ratingFrom!=0 || e.ratingTo!=0) {
-        str << constRatingKey << constKeyValSep << e.ratingFrom << constRangeSep << e.ratingTo<< '\n';
+        str << constRatingKey << constKeyValSep << e.ratingFrom << constRangeSep << e.ratingTo << '\n';
+    }
+    if (e.wholeAlbums) {
+        str << constWholeAlbumsKey << constKeyValSep << QLatin1String("true\n");
     }
     foreach (const Rule &rule, e.rules) {
         if (!rule.isEmpty()) {
@@ -596,6 +608,10 @@ void Dynamic::loadLocal()
                             e.ratingFrom=vals.at(0).toUInt();
                             e.ratingTo=vals.at(1).toUInt();
                         }
+                    } else if (str.startsWith(constWholeAlbumsKey+constKeyValSep)) {
+                        if (str.mid(constWholeAlbumsKey.length()+1)==QLatin1String("true")) {
+                            e.wholeAlbums=true;
+                        }
                     } else {
                         foreach (const QString &k, keys) {
                             if (str.startsWith(k+constKeyValSep)) {
@@ -654,6 +670,10 @@ void Dynamic::parseRemote(const QStringList &response)
                 if (2==vals.count()) {
                     e.ratingFrom=vals.at(0).toUInt();
                     e.ratingTo=vals.at(1).toUInt();
+                }
+            }  else if (str.startsWith(constWholeAlbumsKey+constKeyValSep)) {
+                if (str.mid(constWholeAlbumsKey.length()+1)==QLatin1String("true")) {
+                    e.wholeAlbums=true;
                 }
             } else {
                 foreach (const QString &k, keys) {

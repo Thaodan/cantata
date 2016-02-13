@@ -81,7 +81,14 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="0" rowspan="1" colspan="2">
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="wholeAlbums">
+        <property name="text">
+         <string>Add whole albums</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" rowspan="1" colspan="2">
        <layout class="QHBoxLayout" name="ratingsGroupBoxLayout">
        <item>
         <widget class="QLabel" name="ratingRangeLabel">
@@ -118,7 +125,7 @@
         </item>
        </layout>
       </item>
-      <item row="5" column="0">
+      <item row="6" column="0">
        <widget class="UrlLabel" name="aboutLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -131,7 +138,7 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1" colspan="2">
+      <item row="6" column="1" colspan="2">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

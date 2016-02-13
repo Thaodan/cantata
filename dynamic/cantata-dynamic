@@ -252,6 +252,7 @@ $numMpdSongs=0;
 
 $ratingFrom=0;
 $ratingTo=0;
+$wholeAlbums=0;
 # If we have no include rules, then song list is taken from tracks with ratings
 # Therefore, there is no need to subsequently filter - and ratingFilter woudl be
 # set to 0
@@ -405,6 +406,7 @@ sub readRules() {
             @excludeRules=();
             $ratingFrom=0;
             $ratingTo=0;
+            $wholeAlbums=0;
             close($fileHandle);
             foreach my $line (@lines) {
                 if (! ($line=~ m/^(#)/)) {
@@ -437,6 +439,8 @@ sub readRules() {
                                 $ratingTo=$tmp;
                             }
                         }
+                    } elsif ($key eq "WholeAlbmus" && $val eq "true") {
+                        $wholeAlbums=1;
                     } else {
                         if ($key eq "Date") {
                             my @dateVals = split("-", $val);
