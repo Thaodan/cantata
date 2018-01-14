@@ -123,9 +123,7 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    #ifdef Q_OS_MAC
     void addMenuAction(QMenu *menu, QAction *action);
-    #endif
     void setupTrayIcon();
 
 Q_SIGNALS:
@@ -260,11 +258,13 @@ private:
     void updateActionToolTips();
     void startContextTimer();
     int calcMinHeight();
+    int calcCollapsedSize();
     void setCollapsedSize();
 
 private Q_SLOTS:
     void init();
     void toggleContext();
+    void toggleMenubar();
     void initMpris();
 
 private:
@@ -273,6 +273,7 @@ private:
     qint32 lastSongId;
     PlayQueueProxyModel playQueueProxyModel;
     bool autoScrollPlayQueue;
+    Action *showMenuAction;
     Action *prefAction;
     Action *refreshDbAction;
     Action *doDbRefreshAction;

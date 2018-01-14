@@ -135,6 +135,7 @@ public:
     QString searchCategory();
     bool fetchCovers();
     QString lang();
+    bool showMenubar();
     bool showCoverWidget();
     bool showStopButton();
     bool showRatingWidget();
@@ -234,6 +235,7 @@ public:
     void saveSearchCategory(const QString &v);
     void saveFetchCovers(bool v);
     void saveLang(const QString &v);
+    void saveShowMenubar(bool v);
     void saveShowCoverWidget(bool v);
     void saveShowStopButton(bool v);
     void saveShowRatingWidget(bool v);
